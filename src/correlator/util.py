@@ -60,6 +60,11 @@ def psnr(img1, img2):
 
 # 2, 2, 2 ; 3, 3, 3 ; 5, 5, 5
 def stoa(x):
+    """
+    Converte uma string no formato 'n,n,n;n,n,n;n,n,n' para uma matriz 3x3.
+    :param x: a string a ser convertida.
+    :return: a matriz 3x3 resultante.
+    """
     ret = []
     rows = x.split(';')
     for row in rows:
@@ -71,6 +76,13 @@ def stoa(x):
 
 
 def sub3x3(matrix, x, y):
+    """
+    Extrai uma sub matriz 3x3 de uma matrix.
+    :param matrix: a matriz a ser extraída a sub matriz.
+    :param x: a coluna da matriz a ser utilizado como centro da sub matriz.
+    :param y: a linha da matriz a ser utilizado como centro da sub mtraiz.
+    :return: uma matriz 3x3.
+    """
     ret = np.array([])
     for ay in range(-1, 2):
         for ax in range(-1, 2):
@@ -82,10 +94,17 @@ def sub3x3(matrix, x, y):
 
 
 def show(*img_defs):
+    """
+    Mostra imagens na tela, onde cada tupla (titulo, imagem) é uma imagem a ser mostrada.
+    :param img_defs: a tupla das imagens no formato (titulo, imagem).
+    """
     for img_def in img_defs:
         cv2.imshow(img_def[0], img_def[1])
 
 
 def wait():
+    """
+    Bloqueia o programa e aguarda uma interação do usuáio no teclado.
+    """
     cv2.waitKey(0)
     cv2.destroyAllWindows()

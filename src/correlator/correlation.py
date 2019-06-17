@@ -18,19 +18,18 @@ class Correlator:
 class SimpleCorrelator(Correlator):
 
     def correlate(self, mask):
-        img = np.copy(self.img)
-        m = np.amin(self.img)
+        img = np.array(np.copy(self.img), dtype=float)
+        bimg = util.border(img)
         for y in range(len(img)):
             for x in range(len(img[y])):
-                sub = util.sub3x3(img, y, x)
-                new = []
+                sub = util.sub3x3(bimg, x + 1, y + 1)
+                new = np.array([], float)
                 for c in range(3):
                     band = sub[:, c]
-                    band *= -mask
-                    new.append(np.sum(band))
-                img[y][x] = new + np.abs(m)
-        print(img)
-        return img.astype('uint8')
+                    band *= mask
+                    new = np.append(new, np.sum(band))
+                img[y][x] = new
+        return img + np.amin(img)
 
 
 class TranslatingCorrelator(Correlator):

@@ -70,7 +70,7 @@ def stoa(x):
     for row in rows:
         nums = row.split(',')
         ret += nums
-    ret = np.array(list(map(float, ret)))
+    ret = np.array(list(map(float, ret)), float)
     ret.shape = (3, 3)
     return ret
 
@@ -83,7 +83,7 @@ def sub3x3(matrix, x, y):
     :param y: a linha da matriz a ser utilizado como centro da sub mtraiz.
     :return: uma matriz 3x3.
     """
-    ret = np.array([])
+    ret = np.array([], float)
     for ay in range(-1, 2):
         for ax in range(-1, 2):
             cy = (y + ay) % len(matrix)
@@ -91,6 +91,19 @@ def sub3x3(matrix, x, y):
             ret = np.append(ret, matrix[cy][cx])
     ret.shape = (3, 3, 3)
     return ret
+
+
+def border(img, size=1, rgb=(0, 0, 0)):
+    """
+    Envolve a imagem com uma borda de tamanho variavel.
+    :param img: a imagem a ser envolvida com uma borda.
+    :param size: o tamanho da borda em pixel.
+    :param rgb: a cor da borda ([0-255], [0-255], [0-255]).
+    :return: a imagem com a borda.
+    """
+    bimg = np.full((img.shape[0] + 2 * size, img.shape[1] + 2 * size, img.shape[2]), rgb, float)
+    bimg[size:-size, size:-size] = img
+    return bimg
 
 
 def show(*img_defs):

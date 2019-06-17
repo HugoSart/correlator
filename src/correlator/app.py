@@ -21,7 +21,7 @@ def define_args():
 def main():
     args = define_args()
 
-    print('Aplicando quantização em \"%s\" usando o algorítmo %s.' % (args.input, args.algorithm))
+    print('Aplicando correlação em \"%s\" usando o algorítmo %s.' % (args.input, args.algorithm))
 
     img = cv.imread(args.input)
 

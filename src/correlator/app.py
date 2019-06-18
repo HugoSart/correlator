@@ -28,7 +28,7 @@ def main():
     img = cv.imread(args.input)
     gimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-    # Escolhe o algorítmo que será utilizado na quantização
+    # Escolhe o algorítmo que será utilizado na correlação
     alg = None
     if args.algorithm == 'simple':
         alg = corr.SimpleCorrelator(gimg)
@@ -37,7 +37,7 @@ def main():
     else:
         raise RuntimeError('O método de correlação %s não é um método válido.' % args.algorithm)
 
-    # Aplica quantização
+    # Aplica correlação
     mask = util.stoa(args.mask) * args.scale
     corr_img = alg.correlate(mask)
 

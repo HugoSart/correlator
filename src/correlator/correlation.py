@@ -1,5 +1,4 @@
 import abc
-
 import numpy as np
 
 from correlator import util
@@ -39,20 +38,27 @@ class TranslatingCorrelator(Correlator):
             img = util.zeropad(img)
             correlation = []
 
+            # print(mask)
+
             # gera o conjunto de pesos da máscara e direções de translação
             weights = util.mask_weights(mask)
 
-            # gera as matrizes transladadas
+            """
+            Quebra a imagem original em 9 imagens transladadas (mascara 3x3)
+            Cada uma das imagens transladadas é multiplicada pelo peso da posição dela na mascara
+            """
+
             for i in range(len(weights)):
                 copy = np.copy(img)
                 copy = np.roll(copy, weights[i][0][0], axis=0)
                 copy = np.roll(copy, weights[i][0][1], axis=1)
                 copy = util.padremove(copy)
-                copy *= weights[i][1]
+                # copy *= weights[i][1]
+                np.multiply(copy, weights[i][1], out=copy, casting='unsafe')
                 correlation.append(copy)
 
             # soma as matrizes transladadas
             final = sum(correlation)
-            print(final)
+            img = final
 
             return img

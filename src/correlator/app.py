@@ -26,6 +26,7 @@ def main():
     print('Aplicando correlação em \"%s\" usando o algorítmo %s.' % (args.input, args.algorithm))
 
     img = cv.imread(args.input)
+    img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
     # Escolhe o algorítmo que será utilizado na quantização
     alg = None
@@ -33,12 +34,13 @@ def main():
         alg = corr.SimpleCorrelator(img)
     elif args.algorithm == 'translate':
         alg = corr.TranslatingCorrelator(img)
+    else:
         raise RuntimeError('O método de correlação %s não é um método válido.' % args.algorithm)
 
     # Aplica quantização
     mask = util.stoa(args.mask) * args.scale
     corr_img = alg.correlate(mask)
-
+    # corr_img = cv.cvtColor(corr_img, cv.COLOR_BGR2GRAY)
     # Grava a imagem em um arquivo de saída se necessário
     if args.output is not None:
         cv.imwrite(args.output, corr_img)

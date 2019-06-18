@@ -35,4 +35,24 @@ class SimpleCorrelator(Correlator):
 class TranslatingCorrelator(Correlator):
 
     def correlate(self, mask):
-        pass
+            img = np.copy(self.img)
+            img = util.zeropad(img)
+            correlation = []
+
+            # gera o conjunto de pesos da máscara e direções de translação
+            weights = util.mask_weights(mask)
+
+            # gera as matrizes transladadas
+            for i in range (len(weights)):
+                copy = np.copy(img)
+                copy = np.roll(copy, weights[i][0][0], axis=0)
+                copy = np.roll(copy, weights[i][0][1], axis=1)
+                copy = util.padremove(copy)
+                copy *= weights[i][1]
+                correlation.append(copy)
+
+            # soma as matrizes transladadas
+            final = sum(correlation)
+            print(final)
+
+            return img

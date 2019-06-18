@@ -121,3 +121,49 @@ def wait():
     """
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
+def zeropad(img):
+    """
+    Faz zero padding na imagem 
+    coluna da esquerda, coluna da direita, linha de baixo, linha de cima
+    """
+    row = len(img)
+    col = len(img[0])
+    first = 0
+    img = np.insert(img, first, 0, axis=1)
+    img = np.insert(img, col+1, 0, axis=1)
+    img = np.insert(img, first, 0, axis=0)
+    img = np.insert(img, row+1, 0, axis=0)
+    return img
+
+def padremove(img):
+    """
+    Tira os zero paddings colocado na imagem
+    """
+    row = len(img)
+    col = len(img[0])
+    first = 0
+    img = np.delete(img, first, axis=0)
+    img = np.delete(img, first, axis=1)
+    row = len(img)
+    col = len(img[0])
+    img = np.delete(img, row-1, axis=0)
+    img = np.delete(img, col-1, axis=1)
+    return img
+
+def mask_weights(mask):
+    """
+    Cria o conjunto da máscara, com as posições de deslocamento e peso
+    """
+    row = len(mask)
+    col = len(mask[0])
+    weights = []
+    for i in range(row):
+        for j in range(col):
+            posx = -abs(i)+1
+            posy = -abs(j)+1
+            coordinate = [posx, posy]
+            value = mask[i][j]
+            weights.append([coordinate, value])
+    return weights

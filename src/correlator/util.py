@@ -2,62 +2,6 @@ import numpy as np
 import cv2
 
 
-def nmult(n):
-    """
-    Separa um número em três números onde a multiplicação destes três números resulta no número original.
-
-    :param n: o número a ser fatorado em três números.
-    :return: um array de três posições com os números fatorados.
-    """
-    # Verificação de segurança para n menor do que 1
-    if n <= 1:
-        return [1, 1, 1]
-
-    c = n
-    nums = []
-
-    # Fatora o número n de forma convensional
-    for i in range(2, n + 1):
-        while c % i == 0:
-            nums.append(i)
-            c /= i
-
-    if len(nums) == 1:
-        nums = [nums[0], 1, 1]
-    elif len(nums) == 2:
-        nums = [nums[0], nums[1], 1]
-    elif len(nums) > 3:
-        # Se o número de elementos da fatoração for maior do que três, comprime o array em um de três posições fazendo
-        # a multiplicação do último elemento do array com o menor elemento do array desconsiderando a si mesmo
-        while len(nums) > 3:
-            i1 = np.argmin(nums)
-            n1 = nums[i1]
-            nums.pop(i1)
-            i2 = np.argmin(nums)
-            nums[i2] *= n1
-
-    return nums
-
-
-def aprox(img, palheta):
-    palheta = np.array(palheta).reshape(-1, 3)
-    distancia = np.linalg.norm(img[:, :, None] - palheta[None, None, :], axis=3)
-    indices_palheta = np.argmin(distancia, axis=2)
-    return palheta[indices_palheta]
-
-
-def argmedian(array, column):
-    return np.argsort(array[:, column])[len(array) // 2]
-
-
-def psnr(img1, img2):
-    mse = np.mean((img1 - img2) ** 2)
-    if mse == 0:
-        return 100
-    PIXEL_MAX = 255.0
-    return 20 * np.math.log10(PIXEL_MAX / np.math.sqrt(mse))
-
-
 # 2, 2, 2 ; 3, 3, 3 ; 5, 5, 5
 def stoa(x):
     """
@@ -83,17 +27,17 @@ def sub3x3(matrix, x, y):
     :param y: a linha da matriz a ser utilizado como centro da sub mtraiz.
     :return: uma matriz 3x3.
     """
-    ret = np.array([], float)
+    ret = np.array([], dtype='float64')
     for ay in range(-1, 2):
         for ax in range(-1, 2):
             cy = (y + ay) % len(matrix)
             cx = (x + ax) % len(matrix[0])
             ret = np.append(ret, matrix[cy][cx])
-    ret.shape = (3, 3, 3)
+    ret.shape = (3, 3)
     return ret
 
 
-def border(img, width=1, rgb=(0, 0, 0)):
+def border(img, width=1, rgb=0):
     """
     Envolve a imagem com uma borda constante.
     :param img: a imagem a ser envolvida com uma borda.
@@ -101,9 +45,21 @@ def border(img, width=1, rgb=(0, 0, 0)):
     :param rgb: a cor da borda ([0-255], [0-255], [0-255]).
     :return: a imagem com a borda.
     """
-    bimg = np.full((img.shape[0] + 2 * width, img.shape[1] + 2 * width, img.shape[2]), rgb, 'uint8')
+    bimg = np.full((img.shape[0] + 2 * width, img.shape[1] + 2 * width), rgb, 'float64')
     bimg[width:-width, width:-width] = img
     return bimg
+
+
+def normalize(img):
+    """
+    Normaliza uma imagem GRAYSCALE.
+    :param img:
+    :return:
+    """
+    img += np.abs(np.amin(img))
+    img *= (1.0 / np.amax(img))
+    img *= 255.0
+    return img
 
 
 def show(*img_defs):

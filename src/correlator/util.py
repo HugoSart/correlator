@@ -89,15 +89,11 @@ def sub3x3(matrix, x, y):
             cy = (y + ay) % len(matrix)
             cx = (x + ax) % len(matrix[0])
             ret = np.append(ret, matrix[cy][cx])
-    ret.shape = (3, 3, 1)
+    ret.shape = (3, 3, 3)
     return ret
 
 
-def vintage(img):
-        return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-
-def border(img, width=1, rgb=0):
+def border(img, width=1, rgb=(0, 0, 0)):
     """
     Envolve a imagem com uma borda constante.
     :param img: a imagem a ser envolvida com uma borda.
@@ -105,7 +101,7 @@ def border(img, width=1, rgb=0):
     :param rgb: a cor da borda ([0-255], [0-255], [0-255]).
     :return: a imagem com a borda.
     """
-    bimg = np.full((img.shape[0] + 2 * width, img.shape[1] + 2 * width), rgb, 'uint8')
+    bimg = np.full((img.shape[0] + 2 * width, img.shape[1] + 2 * width, img.shape[2]), rgb, 'uint8')
     bimg[width:-width, width:-width] = img
     return bimg
 

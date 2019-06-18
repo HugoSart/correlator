@@ -1,8 +1,6 @@
 import cv2 as cv
 import argparse
 
-import numpy as np
-
 import correlator.correlation as corr
 from correlator import util
 
@@ -15,7 +13,7 @@ def define_args():
                         help='O caminho onde a imagem será escrita.')
     parser.add_argument('-a', dest='algorithm', type=str, default='simple',
                         help='O algorítmo a ser utilizado para a correlação.')
-    parser.add_argument('-m', dest='mask', type=str, default='[[1, 1, 1], [1, 1, 1], [1, 1, 1]]',
+    parser.add_argument('-m', dest='mask', type=str, default='0,0,0;1,1,1;1,1,1',
                         help='A mascara 3x3 a ser aplicada na imagem.')
     parser.add_argument('-s', dest='scale', type=float, default='1',
                         help='A escala da mascara.')
@@ -28,14 +26,13 @@ def main():
     print('Aplicando correlação em \"%s\" usando o algorítmo %s.' % (args.input, args.algorithm))
 
     img = cv.imread(args.input)
-    imggs = np.array(cv.cvtColor(img, cv.COLOR_BGR2GRAY))
 
     # Escolhe o algorítmo que será utilizado na quantização
     alg = None
     if args.algorithm == 'simple':
-        alg = corr.SimpleCorrelator(imggs)
+        alg = corr.SimpleCorrelator(img)
     elif args.algorithm == 'translate':
-        alg = corr.TranslatingCorrelator(imggs)
+        alg = corr.TranslatingCorrelator(img)
         raise RuntimeError('O método de correlação %s não é um método válido.' % args.algorithm)
 
     # Aplica quantização

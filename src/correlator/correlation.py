@@ -22,8 +22,13 @@ class SimpleCorrelator(Correlator):
         bimg = util.border(img)
         for y in range(len(img)):
             for x in range(len(img[y])):
-                sub = util.sub3x3(bimg, x, y)
-                img[y][x] = np.sum(sub)
+                sub = util.sub3x3(bimg, x + 1, y + 1)
+                new = np.array([])
+                for c in range(3):
+                    band = sub[:, c]
+                    band *= mask
+                    new = np.append(new, np.sum(band))
+                img[y][x] = new
         return img
 
 

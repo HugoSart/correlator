@@ -2,7 +2,7 @@
 Programa simples escrito em Python 3 para a aplicação de correlação em imagens.
 
 ## Métodos
-Este programa possúi três métodos implementados para a quantização de cores:
+Este programa possúi três métodos implementados para a correlação de cores:
 - Correlação simples;
 - Correlação por translação;
 
@@ -26,7 +26,7 @@ Com as dependências instaladas, realize os seguintes passos:
    
    
 ## Exemplo
-Quantização utilizando o método _SimpleQuantizer_:
+Quantização utilizando o método _SimpleCorrelator_:
 ```python
 import correlator.correlation as cor
 import numpy

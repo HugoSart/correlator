@@ -17,7 +17,7 @@ class Correlator:
 class SimpleCorrelator(Correlator):
 
     def correlate(self, mask):
-        t0 = time()
+        initTime = time()
         img = np.array(np.copy(self.img), dtype='float64')
         bimg = util.border(img)
         for y in range(len(img)):
@@ -25,15 +25,15 @@ class SimpleCorrelator(Correlator):
                 sub = util.sub3x3(bimg, x + 1, y + 1)
                 sub *= mask
                 img[y][x] = np.sum(sub)
-        t1 = time()
-        print("Método Ponto a Ponto levou:", t1-t0, " segundos")
+        finalTime = time()
+        print("Point to point method took:", finalTime-initTime, " seconds")
         return util.normalize(img).astype('uint8')
 
 
 class TranslatingCorrelator(Correlator):
 
     def correlate(self, mask):
-            t0 = time()
+            initTime = time()
             img = np.copy(self.img)
             img = util.zeropad(img)
             img = img.astype('float64')
@@ -60,6 +60,6 @@ class TranslatingCorrelator(Correlator):
 
             # soma as matrizes transladadas
             img = np.sum(correlation, axis=0)
-            t1 = time()
-            print("Método da Translação levou:", t1-t0, " segundos")
+            finalTime = time()
+            print("Translation method took:", finalTime-initTime, " seconds")
             return util.normalize(img).astype('uint8')
